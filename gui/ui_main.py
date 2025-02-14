@@ -5,6 +5,18 @@ from ui_expense import ExpenseFrame
 from ui_reports import ReportsFrame
 from ui_settings import SettingsFrame
 
+#* Ortak buton tasarımını belirten sınıf
+class CustomButton(ctk.CTkButton):
+    def __init__(self, master, text, command=None):
+        super().__init__(
+            master, text=text, command=command,
+            fg_color="#578FCA",  # Arka plan rengi
+            text_color="white",  # Yazı rengi
+            corner_radius=8, font=("Arial", 14, "bold"),
+            hover_color="#3674B5",  # Hover efekti
+            width=150, height=40  # Buton boyutları
+        )
+
 class MainApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -13,39 +25,40 @@ class MainApp(ctk.CTk):
         self.title("Budget Manager")
         self.geometry("900x600")
         self.resizable(False, False)
-        ctk.set_appearance_mode("light")
+        ctk.set_appearance_mode("dark")
 
         #* Ana yapı: 2 sütun (Yan Menü + İçerik)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
         #* Sidebar (Yan Menü) Sabit
-        self.sidebar_width = 200
-        self.sidebar = ctk.CTkFrame(self, width=self.sidebar_width, corner_radius=0, fg_color="#2c3e50")
+        self.sidebar_width = 170
+        self.sidebar = ctk.CTkFrame(self, width=self.sidebar_width, corner_radius=0, fg_color="#2E5077")
         self.sidebar.grid(row=0, column=0, sticky="nsw")
 
         #* Menü Başlığı
-        self.menu_label = ctk.CTkLabel(self.sidebar, text="Menü", font=("Arial", 16, "bold"))
+        self.menu_label = ctk.CTkLabel(self.sidebar, text="Menü", font=("Arial", 16, "bold"), text_color="white")
         self.menu_label.pack(pady=10)
 
         #* Sayfa Butonları (Üste hizalanıyor)
-        self.dashboard_btn = ctk.CTkButton(self.sidebar, text="Dashboard", command=self.show_dashboard)
-        self.dashboard_btn.pack(pady=10, padx=8)
+        self.dashboard_btn = CustomButton(self.sidebar, text="Dashboard", command=self.show_dashboard)
+        self.dashboard_btn.pack(pady=5, padx=10)
 
-        self.income_btn = ctk.CTkButton(self.sidebar, text="Gelir Ekle", command=self.show_income)
-        self.income_btn.pack(pady=10, padx=8)
+        self.income_btn = CustomButton(self.sidebar, text="Gelir Ekle", command=self.show_income)
+        self.income_btn.pack(pady=5, padx=10)
 
-        self.expense_btn = ctk.CTkButton(self.sidebar, text="Gider Ekle", command=self.show_expense)
-        self.expense_btn.pack(pady=10, padx=8)
+        self.expense_btn = CustomButton(self.sidebar, text="Gider Ekle", command=self.show_expense)
+        self.expense_btn.pack(pady=5, padx=10)
 
-        self.reports_btn = ctk.CTkButton(self.sidebar, text="Raporlar", command=self.show_reports)
-        self.reports_btn.pack(pady=10, padx=8)
+        self.reports_btn = CustomButton(self.sidebar, text="Raporlar", command=self.show_reports)
+        self.reports_btn.pack(pady=5, padx=10)
 
-        self.settings_btn = ctk.CTkButton(self.sidebar, text="⚙️", command=self.show_settings, width=30)
-        self.settings_btn.pack(side="bottom", pady=20, padx=8)
+        #* En Alta Sabitlenen Ayarlar Butonu
+        self.settings_btn = CustomButton(self.sidebar, text="⚙️ Ayarlar", command=self.show_settings)
+        self.settings_btn.pack(side="bottom", pady=20, padx=10)
 
         #* İçerik alanı (Geri kalan alanı kaplar)
-        self.content_frame = ctk.CTkFrame(self)
+        self.content_frame = ctk.CTkFrame(self, fg_color="#f5f5f5")
         self.content_frame.grid(row=0, column=1, sticky="nsew", padx=4, pady=4)
 
         #* Varsayılan olarak dashboard'u göster
