@@ -24,7 +24,7 @@ class MainApp(ctk.CTk):
         #* Ana pencere ayarları
         self.title("Budget Manager")
         self.geometry("900x600")
-        self.resizable(False, False)
+        self.resizable(True, True)
         ctk.set_appearance_mode("dark")
 
         #* Ana yapı: 2 sütun (Yan Menü + İçerik)
