@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from ui_dashboard import DashboardFrame
-from ui_income import IncomeFrame
+from ui_transactions import TransactionFrame
 from ui_expense import ExpenseFrame
 from ui_reports import ReportsFrame
 from ui_settings import SettingsFrame
@@ -23,7 +23,7 @@ class MainApp(ctk.CTk):
 
         #* Ana pencere ayarları
         self.title("Budget Manager")
-        self.geometry("900x600")
+        self.geometry("650x800")
         self.resizable(True, True)
         ctk.set_appearance_mode("dark")
 
@@ -44,8 +44,8 @@ class MainApp(ctk.CTk):
         self.dashboard_btn = CustomButton(self.sidebar, text="Dashboard", command=self.show_dashboard)
         self.dashboard_btn.pack(pady=5, padx=10)
 
-        self.income_btn = CustomButton(self.sidebar, text="Gelir Ekle", command=self.show_income)
-        self.income_btn.pack(pady=5, padx=10)
+        self.transaction_btn = CustomButton(self.sidebar, text="Ekle", command=self.show_transaction)
+        self.transaction_btn.pack(pady=5, padx=10)
 
         self.expense_btn = CustomButton(self.sidebar, text="Gider Ekle", command=self.show_expense)
         self.expense_btn.pack(pady=5, padx=10)
@@ -75,8 +75,8 @@ class MainApp(ctk.CTk):
     def show_dashboard(self):
         self.show_frame(DashboardFrame)
 
-    def show_income(self):
-        self.show_frame(IncomeFrame)
+    def show_transaction(self):
+        self.show_frame(TransactionFrame)
     
     def show_expense(self):
         self.show_frame(ExpenseFrame)
