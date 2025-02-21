@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.orm import declarative_base
 from datetime import datetime
-
+#red= #b94949
+#blue= #159541
 
 #* Veritabanı bağlantısı kurulumu
 DATABASE_URL = "sqlite:///budget_manager.db"
@@ -26,9 +27,10 @@ class Expense(Base):
     amount = Column(Float, nullable=False)
     category = Column(String, nullable=False)
     description = Column(String, nullable=True)
-
+    date = Column(DateTime, default=datetime.utcnow)
 
 #! Tabloları oluştur
 
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
+

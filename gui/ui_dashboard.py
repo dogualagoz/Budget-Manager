@@ -7,18 +7,30 @@ class DashboardFrame(ctk.CTkFrame):
         super().__init__(parent)
         self.configure(fg_color="#1e1e1e")  # Koyu tema arka plan
 
+        # 🟢 İçerik çerçevesini ortalamak için yapılandır
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+        # Ana kutuyu ortalamak için
+        self.pack(expand=True)
+
         #* Kontrol Paneli Başlığı
         self.header_label = ctk.CTkLabel(self, text="📊 Dashboard", font=("Arial", 25, "bold"), text_color="white")
-        self.header_label.grid(row=0, column=0, padx=20, pady=10, sticky="w")
+        self.header_label.grid(row=0, column=0, padx=40, pady=10, sticky="w")
 
         #* Bakiye Alanı
         self.balance_frame = ctk.CTkFrame(self, fg_color="#2E5077", corner_radius=12)
-        self.balance_frame.grid(row=1, column=0, columnspan=2, padx=20, pady=10, sticky="ew")
+        self.balance_frame.grid(row=1, column=0, columnspan=2, padx=40, pady=10, sticky="ew")
 
         self.balance_label = ctk.CTkLabel(self.balance_frame, text="💰 Güncel Bakiye: 7500₺", font=("Arial", 18, "bold"), text_color="white")
         self.balance_label.pack(pady=10)
 
-        #* Gelir ve Gider Kutucukları
+        # 🟢 GELİR & GİDER kutularını eşit büyütmek için konfigüre ettik
+        self.grid_columnconfigure(0, weight=1)  # Gelir kutusu
+        self.grid_columnconfigure(1, weight=1)  # Gider kutusu
+        self.grid_rowconfigure(2, weight=1)  # Satırın genişlemesini sağladık
+
+        #* Gelir ve Gider Kutucukları (Eşit Genişleyecek)
         self.create_income_expense_boxes()
 
         #* Son İşlemler Alanı
@@ -28,23 +40,23 @@ class DashboardFrame(ctk.CTkFrame):
         self.create_expense_chart()
 
     def create_income_expense_boxes(self):
-        """Gelir ve Gider Kutularını oluşturur."""
-        self.income_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=12, width=150, height=80)
-        self.income_frame.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
+        """📊 Gelir ve Gider Kutularını oluşturur (Eşit genişlikte)."""
+
+        self.income_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
+        self.income_frame.grid(row=2, column=0, padx=(40,10), pady=10, sticky="nsew")  # Her yöne yayılmasını sağladık
 
         ctk.CTkLabel(self.income_frame, text="📈 Aylık Gelir", font=("Arial", 14, "bold"), text_color="green").pack(pady=5)
         ctk.CTkLabel(self.income_frame, text="12,000₺", font=("Arial", 16, "bold"), text_color="green").pack()
 
-        self.expense_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=12, width=150, height=80)
-        self.expense_frame.grid(row=2, column=1, padx=20, pady=10, sticky="nsew")
+        self.expense_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
+        self.expense_frame.grid(row=2, column=1, padx=(10,40), pady=10, sticky="nsew")  # Her yöne yayılmasını sağladık
 
         ctk.CTkLabel(self.expense_frame, text="📉 Aylık Harcama", font=("Arial", 14, "bold"), text_color="red").pack(pady=5)
         ctk.CTkLabel(self.expense_frame, text="4,500₺", font=("Arial", 16, "bold"), text_color="red").pack()
-
     def create_recent_transactions(self):
         """Son İşlemler Alanını oluşturur."""
         self.transactions_frame = ctk.CTkFrame(self, fg_color="#578FCA", corner_radius=12)
-        self.transactions_frame.grid(row=3, column=0, columnspan=2, padx=20, pady=10, sticky="nsew")
+        self.transactions_frame.grid(row=3, column=0, columnspan=2, padx=40, pady=10, sticky="nsew")
 
         ctk.CTkLabel(self.transactions_frame, text="🛒 Son İşlemler", font=("Arial", 14, "bold"), text_color="white").pack(pady=5)
 
@@ -71,7 +83,7 @@ class DashboardFrame(ctk.CTkFrame):
     def create_expense_chart(self):
         """Aylık Harcama Çizelgesi"""
         self.expense_chart_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
-        self.expense_chart_frame.grid(row=4, column=0, columnspan=2, padx=20, pady=10, sticky="nsew")
+        self.expense_chart_frame.grid(row=4, column=0, columnspan=2, padx=40, pady=10, sticky="nsew")
 
         ctk.CTkLabel(self.expense_chart_frame, text="📊 Aylık Harcama Grafiği", 
                      font=("Arial", 14, "bold"), text_color="black").pack(pady=8)
