@@ -1,6 +1,12 @@
 import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from database import get_total_income, get_total_expense
 
 class DashboardFrame(ctk.CTkFrame):
     def __init__(self, parent):
@@ -19,11 +25,18 @@ class DashboardFrame(ctk.CTkFrame):
         self.header_label.grid(row=0, column=0, padx=40, pady=10, sticky="w")
 
         #* Bakiye Alanı
+
+        total_income = get_total_income() # toplam gelir
+        total_expense = get_total_expense() # toplam gider
+        current_balance = total_income - total_expense # Güncel bakiye hesaplama
+
+        
         self.balance_frame = ctk.CTkFrame(self, fg_color="#2E5077", corner_radius=12)
         self.balance_frame.grid(row=1, column=0, columnspan=2, padx=40, pady=10, sticky="ew")
 
-        self.balance_label = ctk.CTkLabel(self.balance_frame, text="💰 Güncel Bakiye: 7500₺", font=("Arial", 18, "bold"), text_color="white")
+        self.balance_label = ctk.CTkLabel(self.balance_frame, text=f"💰 Güncel Bakiye: {current_balance}₺", font=("Arial", 18, "bold"), text_color="white")
         self.balance_label.pack(pady=10)
+        self.update_balance()
 
         # 🟢 GELİR & GİDER kutularını eşit büyütmek için konfigüre ettik
         self.grid_columnconfigure(0, weight=1)  # Gelir kutusu
@@ -106,3 +119,11 @@ class DashboardFrame(ctk.CTkFrame):
         canvas = FigureCanvasTkAgg(fig, master=self.expense_chart_frame)
         canvas.get_tk_widget().pack()
         canvas.draw()
+
+    def update_balance(self):
+        """Bakiye bilgisini günceller"""
+        total_income = get_total_income()
+        total_expense = get_total_expense()
+        current_balance = total_income - total_expense
+
+        self.balance_label.configure(text=f"💰 Güncel Bakiye: {current_balance}₺")

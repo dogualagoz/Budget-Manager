@@ -73,7 +73,7 @@ class MainApp(ctk.CTk):
         self.current_frame.pack(expand=True, fill="both")
 
     def show_dashboard(self):
-        self.show_frame(DashboardFrame)
+        self.show_frame(DashboardFrame)  # 📌 Lambda yerine doğrudan sınıf çağrıldı
 
     def show_income(self):
         self.show_frame(IncomeExpenseFrame)
