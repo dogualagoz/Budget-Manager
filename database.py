@@ -1,5 +1,6 @@
 from sqlalchemy.orm import sessionmaker
 from models import engine, Income, Expense
+from sqlalchemy import func
 
 #* Veritabanı session'u oluştur
 SessionLocal = sessionmaker(bind=engine, autoflush=False)
@@ -122,3 +123,17 @@ def delete_expense(expense_id):
         print(f"Hata oluştu: {e}")
     finally:
         session.close()
+
+def get_total_income():
+    """Veritabanından toplam gelir miktarını döndürür."""
+    session = SessionLocal()
+    total_income = session.query(func.sum(Income.amount)).scalar() or 0
+    session.close()
+    return total_income
+
+def get_total_expense():
+    """Veritabanından toplam gider miktarını döndürür."""
+    session = SessionLocal()
+    total_expense = session.query(func.sum(Expense.amount)).scalar() or 0
+    session.close()
+    return total_expense

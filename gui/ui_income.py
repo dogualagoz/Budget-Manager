@@ -2,11 +2,14 @@ import customtkinter as ctk
 import sys
 import os
 
+
 # Proje kök dizinine erişim sağla
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Veritabanı fonksiyonlarını import et
 from database import add_income,add_expense
+
+
 
 class IncomeExpenseFrame(ctk.CTkFrame):
     def __init__(self, parent):
@@ -70,11 +73,15 @@ class IncomeExpenseFrame(ctk.CTkFrame):
             add_income(amount, category, description)  # Database.py içindeki fonksiyonu çağır
             self.show_message("Gelir başarıyla eklendi!","green")
             self.clear_entries()
+
+            # 🟢 Dashboard Güncelle
+            if self.master:
+                self.master.show_dashboard()
         except ValueError:
             self.show_message("Lütfen geçerli bir sayı girin!","red")
 
     def add_expense_button(self):
-        """Gider Ekleme butonu işlevi"""
+        """Gider ekleme butonu işlevi"""
         amount = self.amount_entry.get()
         category = self.category_combobox.get()
         description = self.description_entry.get()
@@ -82,11 +89,16 @@ class IncomeExpenseFrame(ctk.CTkFrame):
         if not amount or not category:
             self.show_message("Lütfen tüm alanları doldurun!", "red")
             return
+
         try:
             amount = float(amount)
             add_expense(amount, category, description)
             self.show_message("Gider başarıyla eklendi!", "green")
             self.clear_entries()
+
+            # 🟢 Dashboard Güncelle
+            if hasattr(self.master, 'dashboard'):
+                self.master.dashboard.update_balance()
         except ValueError:
             self.show_message("Lütfen geçerli bir sayı girin!", "red")
 
