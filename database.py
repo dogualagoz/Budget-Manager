@@ -137,3 +137,24 @@ def get_total_expense():
     total_expense = session.query(func.sum(Expense.amount)).scalar() or 0
     session.close()
     return total_expense
+
+from sqlalchemy import desc
+
+def get_recent_transactions(limit=15):
+    """Son 15 işlemi tarihe göre sıralayarak getirir (Gelir ve Gider birlikte)."""
+    session = SessionLocal()
+    
+    # Gelirleri çek
+    incomes = session.query(Income.id, Income.amount, Income.category, Income.date).all()
+    incomes = [("income", inc.category, inc.amount, inc.date) for inc in incomes]
+
+    # Giderleri çek
+    expenses = session.query(Expense.id, Expense.amount, Expense.category, Expense.date).all()
+    expenses = [("expense", exp.category, exp.amount, exp.date) for exp in expenses]
+
+    # Gelir ve giderleri birleştir, tarihe göre sıralayıp en güncel 15 işlemi al
+    transactions = incomes + expenses
+    transactions.sort(key=lambda x: x[3], reverse=True)  # Tarihe göre sıralama (En yeni en üstte)
+    
+    session.close()
+    return transactions[:limit]  # Son 15 işlem

@@ -77,6 +77,7 @@ class IncomeExpenseFrame(ctk.CTkFrame):
             # 🟢 Dashboard Güncelle
             if self.master:
                 self.master.show_dashboard()
+                self.master.dashboard.update_recent_transactions()
         except ValueError:
             self.show_message("Lütfen geçerli bir sayı girin!","red")
 
@@ -98,7 +99,9 @@ class IncomeExpenseFrame(ctk.CTkFrame):
 
             # 🟢 Dashboard Güncelle
             if hasattr(self.master, 'dashboard'):
-                self.master.dashboard.update_balance()
+                self.master.dashboard.update_balance() 
+                self.master.dashboard.update_recent_transactions()
+        
         except ValueError:
             self.show_message("Lütfen geçerli bir sayı girin!", "red")
 
