@@ -6,7 +6,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from database import get_total_income, get_total_expense
+from database import get_total_income, get_total_expense, get_recent_transactions
 
 class DashboardFrame(ctk.CTkFrame):
     def __init__(self, parent):
@@ -66,33 +66,30 @@ class DashboardFrame(ctk.CTkFrame):
 
         ctk.CTkLabel(self.expense_frame, text="📉 Aylık Harcama", font=("Arial", 14, "bold"), text_color="red").pack(pady=5)
         ctk.CTkLabel(self.expense_frame, text=f"{get_total_expense()}₺", font=("Arial", 16, "bold"), text_color="red").pack()
+    
     def create_recent_transactions(self):
-        """Son İşlemler Alanını oluşturur."""
+        """Son İşlemler Alanını oluşturur (Gelirler yeşil, giderler kırmızı)."""
         self.transactions_frame = ctk.CTkFrame(self, fg_color="#578FCA", corner_radius=12)
         self.transactions_frame.grid(row=3, column=0, columnspan=2, padx=40, pady=10, sticky="nsew")
 
         ctk.CTkLabel(self.transactions_frame, text="🛒 Son İşlemler", font=("Arial", 14, "bold"), text_color="white").pack(pady=5)
 
-        # Scrollable işlem listesi
-        transactions = [
-            ("Elektrik faturası", "-350₺"),
-            ("Su faturası", "-200₺"),
-            ("Market alışverişi", "-600₺"),
-            ("Maaş Yatırıldı", "+12,000₺"),
-            ("Kira Ödemesi", "-3,000₺"),
-            ("Telefon Faturası", "-250₺"),
-        ]
-
         transaction_frame = ctk.CTkScrollableFrame(self.transactions_frame, fg_color="#578FCA")
         transaction_frame.pack(fill="both", expand=True, padx=5, pady=5)
 
-        for desc, amount in transactions:
+        transactions = get_recent_transactions(limit=15)  # 🟢 En son 15 işlemi tarihe göre çek
+
+        for trans_type, category, amount, date in transactions:  # 🔹 Tarihi de aldık
             row = ctk.CTkFrame(transaction_frame, fg_color="#2E5077", corner_radius=4)
             row.pack(fill="x", pady=4, padx=2)
 
-            ctk.CTkLabel(row, text=desc, font=("Arial", 12), text_color="white").pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=amount, font=("Arial", 12, "bold"), text_color="white").pack(side="right", padx=5)
+            # Kategori
+            ctk.CTkLabel(row, text=category, font=("Arial", 12), text_color="white").pack(side="left", padx=5)
 
+            # Miktar - Gelir Yeşil, Gider Kırmızı
+            amount_color = "#27ae60" if trans_type == "income" else "#e74c3c"  # Yeşil (gelir) - Kırmızı (gider)
+            ctk.CTkLabel(row, text=f"{amount}₺", font=("Arial", 12, "bold"), text_color=amount_color).pack(side="right", padx=5)
+        
     def create_expense_chart(self):
         """Aylık Harcama Çizelgesi"""
         self.expense_chart_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
@@ -127,3 +124,10 @@ class DashboardFrame(ctk.CTkFrame):
         current_balance = total_income - total_expense
 
         self.balance_label.configure(text=f"💰 Güncel Bakiye: {current_balance}₺")
+
+    def update_recent_transactions(self):
+        """Son işlemler listesini yeniler."""
+        for widget in self.transactions_frame.winfo_children():
+            widget.destroy()  # Önce eski işlemleri temizle
+
+        self.create_recent_transactions()  # Yeniden oluştur # Yeniden oluştur
