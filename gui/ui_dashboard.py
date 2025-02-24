@@ -59,13 +59,13 @@ class DashboardFrame(ctk.CTkFrame):
         self.income_frame.grid(row=2, column=0, padx=(40,10), pady=10, sticky="nsew")  # Her yöne yayılmasını sağladık
 
         ctk.CTkLabel(self.income_frame, text="📈 Aylık Gelir", font=("Arial", 14, "bold"), text_color="green").pack(pady=5)
-        ctk.CTkLabel(self.income_frame, text="12,000₺", font=("Arial", 16, "bold"), text_color="green").pack()
+        ctk.CTkLabel(self.income_frame, text=f"{get_total_income()}₺", font=("Arial", 16, "bold"), text_color="green").pack()
 
         self.expense_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=12)
         self.expense_frame.grid(row=2, column=1, padx=(10,40), pady=10, sticky="nsew")  # Her yöne yayılmasını sağladık
 
         ctk.CTkLabel(self.expense_frame, text="📉 Aylık Harcama", font=("Arial", 14, "bold"), text_color="red").pack(pady=5)
-        ctk.CTkLabel(self.expense_frame, text="4,500₺", font=("Arial", 16, "bold"), text_color="red").pack()
+        ctk.CTkLabel(self.expense_frame, text=f"{get_total_expense()}₺", font=("Arial", 16, "bold"), text_color="red").pack()
     def create_recent_transactions(self):
         """Son İşlemler Alanını oluşturur."""
         self.transactions_frame = ctk.CTkFrame(self, fg_color="#578FCA", corner_radius=12)
